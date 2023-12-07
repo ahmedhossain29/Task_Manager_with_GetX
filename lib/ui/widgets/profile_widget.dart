@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../controllers/auth_controller.dart';
 import '../screen/edit_profile_screen.dart';
@@ -22,55 +25,52 @@ class ProfileSummaryCard extends StatefulWidget {
 class _ProfileSummaryCardState extends State<ProfileSummaryCard> {
   @override
   Widget build(BuildContext context) {
-    Uint8List imageBytes =
-        const Base64Decoder().convert(AuthController.user?.photo ?? '');
-    return ListTile(
-      onTap: () {
-        if (widget.enableOnTap) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const EditProfileScreen(),
-            ),
-          );
-        }
-      },
-      leading: CircleAvatar(
-        child: AuthController.user?.photo == null
-            ? const Icon(Icons.person)
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: Image.memory(
-                  imageBytes,
-                  fit: BoxFit.cover,
-                )),
-      ),
-      title: Text(
-        fullName,
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-      ),
-      subtitle: Text(
-        AuthController.user?.email ?? '',
-        style: const TextStyle(color: Colors.white),
-      ),
-      trailing: IconButton(
-          onPressed: () async {
-            await AuthController.clearAuthData();
-            if (mounted) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false);
-            }
-          },
-          icon: const Icon(Icons.logout)),
-      tileColor: Colors.green,
-    );
+    return GetBuilder<AuthController>(builder: (authController) {
+      Uint8List imageBytes =
+          const Base64Decoder().convert(authController.user?.photo ?? '');
+      return ListTile(
+        onTap: () {
+          if (widget.enableOnTap) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditProfileScreen(),
+              ),
+            );
+          }
+        },
+        leading: CircleAvatar(
+          child: authController.user?.photo == null
+              ? const Icon(Icons.person)
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.memory(
+                    imageBytes,
+                    fit: BoxFit.cover,
+                  )),
+        ),
+        title: Text(
+          fullName(authController),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        ),
+        subtitle: Text(
+          authController.user?.email ?? '',
+          style: const TextStyle(color: Colors.white),
+        ),
+        trailing: IconButton(
+            onPressed: () async {
+              await AuthController.clearAuthData();
+              Get.offAll(LoginScreen());
+            },
+            icon: const Icon(Icons.logout)),
+        tileColor: Colors.green,
+      );
+    });
   }
 
-  String get fullName {
-    return '${AuthController.user?.firstName ?? ''} ${AuthController.user?.lastName ?? ''}';
+  String fullName(AuthController authController) {
+    return '${authController.user?.firstName ?? ''} ${authController.user?.lastName ?? ''}';
   }
 }
 

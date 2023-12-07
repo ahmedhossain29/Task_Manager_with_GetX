@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/auth_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/login_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/new_task_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/progress_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/screen/splash_screen.dart';
 
 class TaskManagerApp extends StatelessWidget {
@@ -32,6 +36,17 @@ class TaskManagerApp extends StatelessWidget {
               style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 10),
           ))),
+      initialBinding: ControllerBinder(),
     );
+  }
+}
+
+class ControllerBinder extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(AuthController());
+    Get.put(LoginController());
+    Get.put(NewTaskController());
+    Get.put(ProgressTaskController());
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../data_network_caller/models/user_model.dart';
@@ -27,6 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _mobileTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formlKey = GlobalKey<FormState>();
+  AuthController authController = Get.find<AuthController>();
 
   bool _updateProfileInProgress = false;
 
@@ -35,10 +37,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _emailTEController.text = AuthController.user?.email ?? '';
-    _firstNameTEController.text = AuthController.user?.firstName ?? '';
-    _lastNameTEController.text = AuthController.user?.lastName ?? '';
-    _mobileTEController.text = AuthController.user?.mobile ?? '';
+    _emailTEController.text = authController.user?.email ?? '';
+    _firstNameTEController.text = authController.user?.firstName ?? '';
+    _lastNameTEController.text = authController.user?.lastName ?? '';
+    _mobileTEController.text = authController.user?.mobile ?? '';
   }
 
   @override
@@ -190,12 +192,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {});
     }
     if (response.isSuccess) {
-      AuthController.updateUserInformation(UserModel(
+      Get.find<AuthController>().updateUserInformation(UserModel(
           email: _emailTEController.text.trim(),
           firstName: _firstNameTEController.text.trim(),
           lastName: _lastNameTEController.text.trim(),
           mobile: _mobileTEController.text.trim(),
-          photo: photoInBase64 ?? AuthController.user?.photo));
+          photo: photoInBase64 ?? Get.find<AuthController>().user?.photo));
       if (mounted) {
         showSnackMessage(context, 'Update profile success!');
       }

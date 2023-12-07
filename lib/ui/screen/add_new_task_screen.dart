@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../data_network_caller/network_caller.dart';
 import '../../data_network_caller/network_response.dart';
 import '../../data_network_caller/utility/urls.dart';
+import '../controllers/new_task_controller.dart';
 import '../widgets/body_background.dart';
 import '../widgets/profile_widget.dart';
 import '../widgets/snack_message.dart';
@@ -125,6 +127,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       if (response.isSuccess) {
         _subjectTEController.clear();
         _descriptionTEController.clear();
+        Get.find<NewTaskController>().getNewTaskList();
         if (mounted) {
           showSnackMessage(context, 'New task added!');
         }
