@@ -18,6 +18,7 @@ class ProgressTaskController extends GetxController {
 
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.getProgressTasks);
+    _getProgressTaskInProgress = false;
     if (response.isSuccess) {
       _taskListModel = TaskListModel.fromJson(response.jsonResponse);
       isSuccess = true;
