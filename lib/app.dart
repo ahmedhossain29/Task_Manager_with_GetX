@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/auth_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/cancelled_task_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/completed_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/login_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/new_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/progress_task_controller.dart';
@@ -48,5 +50,7 @@ class ControllerBinder extends Bindings {
     Get.put(LoginController());
     Get.put(NewTaskController());
     Get.put(ProgressTaskController());
+    Get.put(CompletedTaskController());
+    Get.put(CancelledTaskController());
   }
 }
