@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/forgot_password_controller.dart';
-import 'package:taskmanagerwithgetx/ui/screen/pin_verification_screen.dart';
 
 import '../widgets/body_background.dart';
 
@@ -107,15 +106,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Future<void> verifyEmail() async {
     final response = await _forgotPasswordController
         .verifyEmail(_emailTEController.text.trim());
-    // if (response) {
-    //   if (mounted) {
-        
-    //   }
-    // } else {
-    //   if (mounted) {
-    //     _forgotPasswordController.errormessage;
-    //   }
-    // }
+    if (mounted) {
+      _forgotPasswordController.errormessage;
+    }
   }
 
   @override

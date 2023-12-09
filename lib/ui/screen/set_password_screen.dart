@@ -124,13 +124,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   Future<void> setPassword() async {
     final response = await _setPasswordController.setPassword(
         widget.email, _confirmPasswordTEController.text.trim(), widget.pin);
-
-    // if(response) {
-    //   Get.to(const LoginScreen());
-    // } else {
-    //   if (mounted) {
-    //     _setPasswordController.errorMessage;
-    //   }
-    // }
+    if (mounted) {
+      _setPasswordController.errorMessage;
+    }
   }
 }

@@ -6,7 +6,9 @@ import 'package:taskmanagerwithgetx/ui/screen/set_password_screen.dart';
 
 class PinVerificationController extends GetxController {
   String _errorMessage = '';
+  String _doneMessage = '';
   String get errorMessage => _errorMessage;
+  String get DoneMessage => _doneMessage;
 
   Future<void> verifyPin(String email, String pin) async {
     final pinVerify = Urls.pinVerification(email, pin);
@@ -17,6 +19,7 @@ class PinVerificationController extends GetxController {
         email: email,
         pin: pin,
       ));
+      _doneMessage = "OTP Verify";
     } else {
       _errorMessage = 'Invalid OTP Code';
     }

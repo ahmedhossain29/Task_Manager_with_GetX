@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/pin_verification_controller.dart';
-import 'package:taskmanagerwithgetx/ui/screen/set_password_screen.dart';
 import 'package:taskmanagerwithgetx/ui/screen/sign_up_screen.dart';
+import 'package:taskmanagerwithgetx/ui/widgets/snack_message.dart';
 
 import '../widgets/body_background.dart';
 
@@ -137,12 +137,8 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
   Future<void> verifyPin() async {
     final response =
         await _pinVerificationController.verifyPin(widget.email, pin);
-     
-
-      // if (mounted) {
-      //   _pinVerificationController.errorMessage;
-      // }
-      
+    if (mounted) {
+      showSnackMessage(context, _pinVerificationController.errorMessage);
     }
   }
-
+}
