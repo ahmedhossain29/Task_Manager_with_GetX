@@ -1,9 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/sign_up_controller.dart';
 
-import '../../data_network_caller/network_caller.dart';
-import '../../data_network_caller/network_response.dart';
-import '../../data_network_caller/utility/urls.dart';
 import '../widgets/body_background.dart';
 import '../widgets/snack_message.dart';
 import 'login_screen.dart';
@@ -22,7 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _mobileTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final SignupController _signupController = Get.find<SignupController>();
   bool _signUpInProgress = false;
 
   @override
@@ -145,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            _signUp();
+                            signUp();
                           },
                           child: const Icon(
                             Icons.arrow_circle_right_outlined,
@@ -190,41 +189,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> _signUp() async {
-    if (_formKey.currentState!.validate()) {
-      _signUpInProgress = true;
+  Future<void> signUp() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    final response = await _signupController.signUp(
+        _emailTEController.text.trim(),
+        _firstNameTEController.text.trim(),
+        _lastNameTEController.text.trim(),
+        _mobileTEController.text.trim(),
+        _passwordTEController.text.trim());
+    if (response) {
+      Get.offAll(const LoginScreen());
+    } else {
       if (mounted) {
-        setState(() {});
-      }
-      final NetworkResponse response =
-          await NetworkCaller().postRequest(Urls.registration, body: {
-        "email": _emailTEController.text.trim(),
-        "firstName": _firstNameTEController.text.trim(),
-        "lastName": _lastNameTEController.text.trim(),
-        "mobile": _mobileTEController.text.trim(),
-        "password": _passwordTEController.text,
-        "photo": '',
-      });
-      _signUpInProgress = false;
-      if (mounted) {
-        setState(() {});
-      }
-      if (response.isSuccess) {
-        _clearTextFields();
-        if (mounted) {
-          showSnackMessage(context, 'Account has been created! Please login.');
-        }
-        if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
-        }
-      } else {
-        if (mounted) {
-          showSnackMessage(
-              context, 'Account creation failed! Please try again', true);
-        }
+        showSnackMessage(context, _signupController.failedmessage);
       }
     }
   }
