@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/pin_verification_controller.dart';
 import 'package:taskmanagerwithgetx/ui/screen/set_password_screen.dart';
 import 'package:taskmanagerwithgetx/ui/screen/sign_up_screen.dart';
 
-import '../../data_network_caller/network_caller.dart';
-import '../../data_network_caller/network_response.dart';
-import '../../data_network_caller/utility/urls.dart';
 import '../widgets/body_background.dart';
-import '../widgets/snack_message.dart';
 
 class PinVerificationScreen extends StatefulWidget {
   final String email;
@@ -19,6 +17,8 @@ class PinVerificationScreen extends StatefulWidget {
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
+  final PinVerificationController _pinVerificationController =
+      Get.find<PinVerificationController>();
   String pin = '';
 
   @override
@@ -135,22 +135,18 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
 // pin Verification
 
   Future<void> verifyPin() async {
-    final pinVerify = Urls.pinVerification(widget.email, pin);
-    NetworkResponse response = await NetworkCaller().getRequest(pinVerify);
-    final status = response.jsonResponse['status'] == "success";
-    if (response.isSuccess && status) {
+    final response =
+        await _pinVerificationController.verifyPin(widget.email, pin);
+    if (response) {
       if (mounted) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SetPasswordScreen(
-                      email: widget.email,
-                      pin: pin,
-                    )));
+        Get.to(SetPasswordScreen(
+          email: widget.email,
+          pin: pin,
+        ));
       }
     } else {
       if (mounted) {
-        showSnackMessage(context, 'Invalid OTP Code');
+        _pinVerificationController.errorMessage;
       }
     }
   }
