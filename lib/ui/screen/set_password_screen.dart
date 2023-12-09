@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/set_password_controller.dart';
 
-import '../../data_network_caller/network_caller.dart';
-import '../../data_network_caller/network_response.dart';
-import '../../data_network_caller/utility/urls.dart';
 import '../widgets/body_background.dart';
-import '../widgets/snack_message.dart';
 import 'login_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
@@ -21,6 +19,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
   final TextEditingController _confirmPasswordTEController =
       TextEditingController();
+  final SetPasswordController _setPasswordController =
+      Get.find<SetPasswordController>();
+
   String password = '';
 
   @override
@@ -121,34 +122,14 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
   //set password
   Future<void> setPassword() async {
-    // void checkPassword() {
-    //   String enteredPassword = _passwordTEController.text.trim();
-    //   String confirmPassword = _confirmPasswordTEController.text.trim();
-    //   if (enteredPassword == confirmPassword) {
-    //     setState(() {
-    //       password = enteredPassword;
-    //     });
-    //   } else {
-    //     print('Passwords do not match. Please try again.');
-    //   }
-    // }
+    final response = await _setPasswordController.setPassword(
+        widget.email, _confirmPasswordTEController.text.trim(), widget.pin);
 
-    NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.setPassword, body: {
-      "email": widget.email,
-      "OTP": widget.pin,
-      "password": _confirmPasswordTEController.text,
-    });
-    print(response.jsonResponse);
-    final status = response.jsonResponse['status'] == "success";
-    if (response.isSuccess && status) {
+    if (response) {
+      Get.to(const LoginScreen());
+    } else {
       if (mounted) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      } else {
-        if (mounted) {
-          showSnackMessage(context, 'Invalid Request');
-        }
+        _setPasswordController.errorMessage;
       }
     }
   }

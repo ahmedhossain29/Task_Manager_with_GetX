@@ -28,6 +28,7 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
 
   Future<void> getTaskCountSummaryList() async {
     getTaskCountSummaryInProgress = true;
+
     if (mounted) {
       setState(() {});
     }

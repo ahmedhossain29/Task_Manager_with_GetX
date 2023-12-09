@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/data_network_caller/models/task_list_model.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/cancelled_task_controller.dart';
 
-import '../../data_network_caller/models/task_list_model.dart';
 import '../widgets/profile_widget.dart';
 import '../widgets/task_item_card.dart';
 
@@ -14,7 +14,7 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
-  TaskListModel taskListModel = TaskListModel();
+    TaskListModel taskListModel = TaskListModel();
 
   @override
   void initState() {

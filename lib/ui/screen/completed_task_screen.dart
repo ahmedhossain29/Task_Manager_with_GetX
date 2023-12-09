@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taskmanagerwithgetx/data_network_caller/models/task_list_model.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/completed_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/widgets/profile_widget.dart';
 import 'package:taskmanagerwithgetx/ui/widgets/task_item_card.dart';
@@ -13,8 +12,7 @@ class CompletedTaskScreen extends StatefulWidget {
 }
 
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
-  bool getCompletedTaskInProgress = false;
-  TaskListModel taskListModel = TaskListModel();
+  //TaskListModel taskListModel = TaskListModel();
 
   @override
   void initState() {
