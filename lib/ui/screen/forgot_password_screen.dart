@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/forgot_password_controller.dart';
 import 'package:taskmanagerwithgetx/ui/screen/pin_verification_screen.dart';
 
-import '../../data_network_caller/network_caller.dart';
-import '../../data_network_caller/network_response.dart';
-import '../../data_network_caller/utility/urls.dart';
 import '../widgets/body_background.dart';
-import '../widgets/snack_message.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -16,6 +14,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailTEController = TextEditingController();
+  final ForgotPasswordController _forgotPasswordController =
+      Get.find<ForgotPasswordController>();
 
   @override
   Widget build(BuildContext context) {
@@ -105,36 +105,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Future<void> verifyEmail() async {
-    final url = Urls.recoverVerifyEmail(_emailTEController.text.trim());
-    NetworkResponse response = await NetworkCaller().getRequest(url);
-
-    final status = response.jsonResponse['status'] == "success";
-    if (response.isSuccess && status) {
+    final response = await _forgotPasswordController
+        .verifyEmail(_emailTEController.text.trim());
+    if (response) {
       if (mounted) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PinVerificationScreen(
-                      email: _emailTEController.text.trim(),
-                    )));
+        Get.to(PinVerificationScreen(
+          email: _emailTEController.text.trim(),
+        ));
       }
     } else {
       if (mounted) {
-        showSnackMessage(context, 'No User Found');
+        _forgotPasswordController.errormessage;
       }
     }
+  }
 
-    @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      verifyEmail();
-    }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    verifyEmail();
+  }
 
-    @override
-    void dispose() {
-      _emailTEController.dispose();
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    _emailTEController.dispose();
+    super.dispose();
   }
 }
