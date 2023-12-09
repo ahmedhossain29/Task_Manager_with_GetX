@@ -107,17 +107,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Future<void> verifyEmail() async {
     final response = await _forgotPasswordController
         .verifyEmail(_emailTEController.text.trim());
-    if (response) {
-      if (mounted) {
-        Get.to(PinVerificationScreen(
-          email: _emailTEController.text.trim(),
-        ));
-      }
-    } else {
-      if (mounted) {
-        _forgotPasswordController.errormessage;
-      }
-    }
+    // if (response) {
+    //   if (mounted) {
+        
+    //   }
+    // } else {
+    //   if (mounted) {
+    //     _forgotPasswordController.errormessage;
+    //   }
+    // }
   }
 
   @override

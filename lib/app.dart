@@ -8,6 +8,7 @@ import 'package:taskmanagerwithgetx/ui/controllers/login_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/new_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/pin_verification_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/progress_task_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/set_password_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/sign_up_controller.dart';
 import 'package:taskmanagerwithgetx/ui/screen/splash_screen.dart';
 
@@ -58,5 +59,6 @@ class ControllerBinder extends Bindings {
     Get.put(SignupController());
     Get.put(ForgotPasswordController());
     Get.put(PinVerificationController());
+    Get.put(SetPasswordController());
   }
 }

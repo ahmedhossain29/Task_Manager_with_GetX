@@ -137,17 +137,12 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
   Future<void> verifyPin() async {
     final response =
         await _pinVerificationController.verifyPin(widget.email, pin);
-    if (response) {
-      if (mounted) {
-        Get.to(SetPasswordScreen(
-          email: widget.email,
-          pin: pin,
-        ));
-      }
-    } else {
-      if (mounted) {
-        _pinVerificationController.errorMessage;
-      }
+     
+
+      // if (mounted) {
+      //   _pinVerificationController.errorMessage;
+      // }
+      
     }
   }
-}
+
