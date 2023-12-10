@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/update_profile_controller.dart';
 
-import '../../data_network_caller/models/user_model.dart';
-import '../../data_network_caller/network_caller.dart';
-import '../../data_network_caller/network_response.dart';
-import '../../data_network_caller/utility/urls.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/body_background.dart';
 import '../widgets/profile_widget.dart';
@@ -30,9 +25,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final GlobalKey<FormState> _formlKey = GlobalKey<FormState>();
   AuthController authController = Get.find<AuthController>();
 
-  bool _updateProfileInProgress = false;
+  final UpdateProfileController _updateProfileController =
+      Get.find<UpdateProfileController>();
 
-  XFile? photo;
+  //XFile? photo;
 
   @override
   void initState() {
@@ -132,17 +128,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(
                             width: double.infinity,
-                            child: Visibility(
-                              visible: _updateProfileInProgress == false,
-                              replacement: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: updateProfile,
-                                child: const Icon(
-                                    Icons.arrow_circle_right_outlined),
-                              ),
-                            ),
+                            child: GetBuilder<UpdateProfileController>(
+                                builder: (updateProfileController) {
+                              return Visibility(
+                                visible: updateProfileController
+                                        .updateProfileInProgress ==
+                                    false,
+                                replacement: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: updateProfile,
+                                  child: const Icon(
+                                      Icons.arrow_circle_right_outlined),
+                                ),
+                              );
+                            }),
                           )
                         ],
                       ),
@@ -161,49 +162,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (!_formlKey.currentState!.validate()) {
       return;
     }
-    _updateProfileInProgress = true;
+
+    final response = await _updateProfileController.updateProfile(
+        _firstNameTEController.text.trim(),
+        _lastNameTEController.text.trim(),
+        _emailTEController.text.trim(),
+        _mobileTEController.text.trim(),
+        _passwordTEController.text.trim());
+
+    _updateProfileController.updateProfileInProgress;
     if (mounted) {
-      setState(() {});
-    }
-    String? photoInBase64;
-    Map<String, dynamic> inputData = {
-      "firstName": _firstNameTEController.text.trim(),
-      "lastName": _lastNameTEController.text.trim(),
-      "email": _emailTEController.text.trim(),
-      "mobile": _mobileTEController.text.trim(),
-    };
-
-    if (_passwordTEController.text.isNotEmpty) {
-      inputData['password'] = _passwordTEController.text;
-    }
-
-    if (photo != null) {
-      List<int> imageBytes = await photo!.readAsBytes();
-      photoInBase64 = base64Encode(imageBytes);
-      inputData['photo'] = photoInBase64;
-    }
-
-    final NetworkResponse response = await NetworkCaller().postRequest(
-      Urls.updateProfile,
-      body: inputData,
-    );
-    _updateProfileInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      Get.find<AuthController>().updateUserInformation(UserModel(
-          email: _emailTEController.text.trim(),
-          firstName: _firstNameTEController.text.trim(),
-          lastName: _lastNameTEController.text.trim(),
-          mobile: _mobileTEController.text.trim(),
-          photo: photoInBase64 ?? Get.find<AuthController>().user?.photo));
-      if (mounted) {
-        showSnackMessage(context, 'Update profile success!');
-      }
+      showSnackMessage(context, _updateProfileController.message);
     } else {
       if (mounted) {
-        showSnackMessage(context, 'Update profile failed. Try again.');
+        showSnackMessage(context, _updateProfileController.errormessage);
       }
     }
   }
@@ -239,7 +211,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 final XFile? image = await ImagePicker()
                     .pickImage(source: ImageSource.camera, imageQuality: 50);
                 if (image != null) {
-                  photo = image;
+                  _updateProfileController.photo = image;
                   if (mounted) {
                     setState(() {});
                   }
@@ -248,8 +220,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.only(left: 16),
                 child: Visibility(
-                  visible: photo == null,
-                  replacement: Text(photo?.name ?? ''),
+                  visible: _updateProfileController.photo == null,
+                  replacement: Text(_updateProfileController.photo?.name ?? ''),
                   child: const Text('Select a photo'),
                 ),
               ),
