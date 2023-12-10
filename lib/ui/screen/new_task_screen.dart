@@ -20,7 +20,7 @@ class NewTasksScreen extends StatefulWidget {
 }
 
 class _NewTasksScreenState extends State<NewTasksScreen> {
-  bool getTaskCountSummaryInProgress = false;
+  // bool getTaskCountSummaryInProgress = false;
   TaskCountSummaryListModel taskCountSummaryListModel =
       TaskCountSummaryListModel();
   final GetTaskCountSummaryListController _getTaskCountSummaryListController =
@@ -59,7 +59,9 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
           children: [
             const ProfileSummaryCard(),
             Visibility(
-              visible: getTaskCountSummaryInProgress == false &&
+              visible: _getTaskCountSummaryListController
+                          .getTaskCountSummaryInProgress ==
+                      false &&
                   (_getTaskCountSummaryListController.taskCountSummaryListModel
                           .taskCountList?.isNotEmpty ??
                       false),
