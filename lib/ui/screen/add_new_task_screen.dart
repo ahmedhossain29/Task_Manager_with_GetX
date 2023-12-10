@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/add_new_task_controller.dart';
 
-import '../../data_network_caller/network_caller.dart';
-import '../../data_network_caller/network_response.dart';
-import '../../data_network_caller/utility/urls.dart';
-import '../controllers/new_task_controller.dart';
 import '../widgets/body_background.dart';
 import '../widgets/profile_widget.dart';
 import '../widgets/snack_message.dart';
@@ -22,7 +19,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _createTaskInProgress = false;
+  final AddNewTaskController _addNewTaskController =
+      Get.find<AddNewTaskController>();
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +71,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         ),
                         validator: (String? value) {
                           if (value?.trim().isEmpty ?? true) {
-                            return 'Enter your subject';
+                            return 'Enter your Description';
                           }
                           return null;
                         },
@@ -84,7 +82,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: Visibility(
-                          visible: _createTaskInProgress == false,
+                          visible: _addNewTaskController.createTaskInProgress ==
+                              false,
                           replacement: const Center(
                             child: CircularProgressIndicator(),
                           ),
@@ -110,30 +109,16 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
 
   Future<void> createTask() async {
     if (_formKey.currentState!.validate()) {
-      _createTaskInProgress = true;
+      final response = await _addNewTaskController.createTask(
+          _subjectTEController.text.trim(),
+          _descriptionTEController.text.trim());
+      _subjectTEController.clear();
+      _descriptionTEController.clear();
       if (mounted) {
-        setState(() {});
-      }
-      final NetworkResponse response =
-          await NetworkCaller().postRequest(Urls.createNewTask, body: {
-        "title": _subjectTEController.text.trim(),
-        "description": _descriptionTEController.text.trim(),
-        "status": "New"
-      });
-      _createTaskInProgress = false;
-      if (mounted) {
-        setState(() {});
-      }
-      if (response.isSuccess) {
-        _subjectTEController.clear();
-        _descriptionTEController.clear();
-        Get.find<NewTaskController>().getNewTaskList();
-        if (mounted) {
-          showSnackMessage(context, 'New task added!');
-        }
+        showSnackMessage(context, _addNewTaskController.message);
       } else {
         if (mounted) {
-          showSnackMessage(context, 'Create new Task failed! Try Again', true);
+          showSnackMessage(context, _addNewTaskController.errormessage);
         }
       }
     }
