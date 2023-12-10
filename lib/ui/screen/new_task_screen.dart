@@ -78,8 +78,8 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
                               ?.length ??
                           0,
                       itemBuilder: (context, index) {
-                        TaskCount taskCount =
-                            taskCountSummaryListModel.taskCountList![index];
+                        TaskCount taskCount = getTaskCountSummaryList
+                            .taskCountSummaryListModel.taskCountList![index];
                         return FittedBox(
                           child: SummaryCard(
                             count: taskCount.sum.toString(),

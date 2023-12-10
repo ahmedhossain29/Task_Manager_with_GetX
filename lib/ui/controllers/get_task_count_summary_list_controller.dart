@@ -11,7 +11,7 @@ class GetTaskCountSummaryListController extends GetxController {
   bool get getTaskCountSummaryInProgress => _getTaskCountSummaryInProgress;
 
   Future<void> getTaskCountSummaryList() async {
-    _getTaskCountSummaryInProgress = true;
+    _getTaskCountSummaryInProgress = false;
     update();
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.getTaskStatusCount);
