@@ -15,7 +15,7 @@ class ProgressTaskController extends GetxController {
   Future<bool> getProgressTaskList() async {
     bool isSuccess = false;
     _getProgressTaskInProgress = true;
-
+    update();
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.getProgressTasks);
     _getProgressTaskInProgress = false;

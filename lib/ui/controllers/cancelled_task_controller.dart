@@ -14,7 +14,7 @@ class CancelledTaskController extends GetxController {
   Future<bool> getCancelledTaskList() async {
     bool isSuccess = false;
     _getCancelledTaskInProgress = true;
-
+    update();
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.getCancelledTasks);
     _getCancelledTaskInProgress = false;

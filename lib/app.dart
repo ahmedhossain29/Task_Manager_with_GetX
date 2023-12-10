@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/add_new_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/auth_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/cancelled_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/completed_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/forgot_password_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/get_task_count_summary_list_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/login_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/new_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/pin_verification_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/progress_task_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/set_password_controller.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/sign_up_controller.dart';
+import 'package:taskmanagerwithgetx/ui/controllers/update_profile_controller.dart';
 import 'package:taskmanagerwithgetx/ui/screen/splash_screen.dart';
 
 class TaskManagerApp extends StatelessWidget {
@@ -60,5 +63,8 @@ class ControllerBinder extends Bindings {
     Get.put(ForgotPasswordController());
     Get.put(PinVerificationController());
     Get.put(SetPasswordController());
+    Get.put(UpdateProfileController());
+    Get.put(AddNewTaskController());
+    Get.put(GetTaskCountSummaryListController());
   }
 }

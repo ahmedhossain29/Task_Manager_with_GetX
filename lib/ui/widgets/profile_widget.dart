@@ -31,11 +31,8 @@ class _ProfileSummaryCardState extends State<ProfileSummaryCard> {
       return ListTile(
         onTap: () {
           if (widget.enableOnTap) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EditProfileScreen(),
-              ),
+            Get.offAll(
+              const EditProfileScreen(),
             );
           }
         },
