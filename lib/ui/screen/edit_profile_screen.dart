@@ -163,6 +163,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return;
     }
 
+    // ignore: unused_local_variable
     final response = await _updateProfileController.updateProfile(
         _firstNameTEController.text.trim(),
         _lastNameTEController.text.trim(),

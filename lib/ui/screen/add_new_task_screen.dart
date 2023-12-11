@@ -109,6 +109,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
 
   Future<void> createTask() async {
     if (_formKey.currentState!.validate()) {
+      // ignore: unused_local_variable
       final response = await _addNewTaskController.createTask(
           _subjectTEController.text.trim(),
           _descriptionTEController.text.trim());

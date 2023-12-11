@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskmanagerwithgetx/ui/controllers/set_password_controller.dart';
+import 'package:taskmanagerwithgetx/ui/widgets/snack_message.dart';
 
 import '../widgets/body_background.dart';
 import 'login_screen.dart';
@@ -125,7 +126,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     final response = await _setPasswordController.setPassword(
         widget.email, _confirmPasswordTEController.text.trim(), widget.pin);
     if (mounted) {
-      _setPasswordController.errorMessage;
+      showSnackMessage(context, _setPasswordController.errorMessage);
     }
   }
 }
